@@ -2,7 +2,6 @@
 
 namespace Spatie\Export\Tests\Feature;
 
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Export\Exporter;
 use Spatie\Export\ExportServiceProvider;
@@ -69,7 +68,7 @@ class ExportTest extends BaseTestCase
             ->urls([
                 'http://localhost:8080/',
                 'http://localhost:8080/about',
-                'http://localhost:8080/feed/blog.atom'
+                'http://localhost:8080/feed/blog.atom',
             ])
             ->export();
 
@@ -86,7 +85,7 @@ class ExportTest extends BaseTestCase
             ->paths('/')
             ->urls([
                 'http://localhost:8080/about',
-                'http://localhost:8080/feed/blog.atom'
+                'http://localhost:8080/feed/blog.atom',
             ])
             ->export();
 
