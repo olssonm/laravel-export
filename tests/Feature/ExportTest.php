@@ -2,6 +2,7 @@
 
 namespace Spatie\Export\Tests\Feature;
 
+use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Export\Exporter;
 use Spatie\Export\ExportServiceProvider;
