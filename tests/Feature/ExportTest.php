@@ -2,6 +2,7 @@
 
 namespace Spatie\Export\Tests\Feature;
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Export\Exporter;
@@ -15,6 +16,23 @@ class ExportTest extends BaseTestCase
 
     protected $distDirectory = __DIR__.DIRECTORY_SEPARATOR.'dist';
 
+    protected function defineRoutes($router)
+    {
+        Route::middleware('web')->group(function() {
+            Route::get('/', function () {
+                return static::HOME_CONTENT;
+            })->name('start');
+
+            Route::get('about', function () {
+                return static::ABOUT_CONTENT;
+            });
+
+            Route::get('feed/blog.atom', function () {
+                return static::FEED_CONTENT;
+            });
+        });
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,18 +42,6 @@ class ExportTest extends BaseTestCase
             ? 'del '.$this->distDirectory.' /q'
             : 'rm -r '.$this->distDirectory);
         }
-
-        Route::get('/', function () {
-            return static::HOME_CONTENT;
-        });
-
-        Route::get('about', function () {
-            return static::ABOUT_CONTENT;
-        });
-
-        Route::get('feed/blog.atom', function () {
-            return static::FEED_CONTENT;
-        });
     }
 
     /** @test */

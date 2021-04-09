@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use RuntimeException;
-use Spatie\Crawler\CrawlObserver;
+use Spatie\Crawler\CrawlObservers\CrawlObserver;
 use Spatie\Export\Destination;
 use Spatie\Export\Traits\NormalizedPath;
 
@@ -31,7 +31,7 @@ class Observer extends CrawlObserver
         if ($response->getStatusCode() !== 200) {
             throw new RuntimeException("URL [{$url}] returned status code [{$response->getStatusCode()}]");
         }
-      
+
         $this->destination->write(
             $this->normalizePath($url->getPath()),
             (string) $response->getBody()
