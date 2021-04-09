@@ -27,6 +27,18 @@ class ExportTest extends BaseTestCase
             ? 'del '.$this->distDirectory.' /q'
             : 'rm -r '.$this->distDirectory);
         }
+
+        Route::get('/', function () {
+            return static::HOME_CONTENT;
+        });
+
+        Route::get('about', function () {
+            return static::ABOUT_CONTENT;
+        });
+
+        Route::get('feed/blog.atom', function () {
+            return static::FEED_CONTENT;
+        });
     }
 
     public function skipIfTestServerIsNotRunning(): void
