@@ -2,7 +2,6 @@
 
 namespace Spatie\Export\Tests\Feature;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Export\Exporter;
@@ -18,7 +17,7 @@ class ExportTest extends BaseTestCase
 
     protected function defineRoutes($router)
     {
-        Route::middleware('web')->group(function() {
+        Route::middleware('web')->group(function () {
             Route::get('/', function () {
                 return static::HOME_CONTENT;
             })->name('start');
