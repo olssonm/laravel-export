@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Export\Exporter;
 use Spatie\Export\ExportServiceProvider;
+use Throwable;
 
 class ExportTest extends BaseTestCase
 {
@@ -16,22 +17,7 @@ class ExportTest extends BaseTestCase
 
     protected $distDirectory = __DIR__.DIRECTORY_SEPARATOR.'dist';
 
-    protected function defineRoutes($router)
-    {
-        Route::middleware('web')->group(function() {
-            Route::get('/', function () {
-                return static::HOME_CONTENT;
-            })->name('start');
-
-            Route::get('about', function () {
-                return static::ABOUT_CONTENT;
-            });
-
-            Route::get('feed/blog.atom', function () {
-                return static::FEED_CONTENT;
-            });
-        });
-    }
+    public $baseUrl = 'http://localhost:8080';
 
     protected function setUp(): void
     {
@@ -41,6 +27,15 @@ class ExportTest extends BaseTestCase
             exec(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
             ? 'del '.$this->distDirectory.' /q'
             : 'rm -r '.$this->distDirectory);
+        }
+    }
+
+    public function skipIfTestServerIsNotRunning(): void
+    {
+        try {
+            file_get_contents('http://localhost:8080');
+        } catch (Throwable $e) {
+            $this->markTestSkipped('The testserver is not running.');
         }
     }
 
@@ -72,7 +67,11 @@ class ExportTest extends BaseTestCase
     {
         app(Exporter::class)
             ->crawl(false)
-            ->urls([url('/'), url('/about'), url('/feed/blog.atom')])
+            ->urls([
+                'http://localhost:8080/',
+                'http://localhost:8080/about',
+                'http://localhost:8080/feed/blog.atom'
+            ])
             ->export();
 
         static::assertHomeExists();
@@ -86,7 +85,10 @@ class ExportTest extends BaseTestCase
         app(Exporter::class)
             ->crawl(false)
             ->paths('/')
-            ->urls(url('/about'), url('/feed/blog.atom'))
+            ->urls([
+                'http://localhost:8080/about',
+                'http://localhost:8080/feed/blog.atom'
+            ])
             ->export();
 
         static::assertHomeExists();
